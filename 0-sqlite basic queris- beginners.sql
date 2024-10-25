@@ -163,8 +163,80 @@ Group by project_id
 
 
 
+16.	
+SELECT *
+FROM job_postings_fact
+where salary_year_avg is not null and salary_hour_avg is not null
+
+
+17. HOW TO UNDERSTAND THE REPETATIVES IN A COLOUMN:
+
+SELECT count (skills) as ccc,
+       skills,
+       skill_id
+FROM skills_dim
+GROUP by skills
+order by ccc desc
+SELECT DISTINCT skill_id 
+FROM skills_dim
+where skills= 'sas'
+
+
+	
+18.	
+SELECT        job_postings_fact.job_id,
+              job_postings_fact.job_title,
+              skills_job_dim.skill_id,
+              skills_dim.skills
+FROM job_postings_fact
+inner join skills_job_dim on job_postings_fact.job_id = skills_job_dim.job_id
+inner join skills_dim on skills_job_dim.skill_id = skills_dim.skill_id
 
 
 
+19.    SELECT job_postings_fact.job_id,
+       job_postings_fact.job_title,
+       job_postings_fact.company_id,
+       company_dim.company_id,
+       company_dim.name
+FROM job_postings_fact
+LEFT JOIN company_dim ON job_postings_fact.company_id = company_dim.company_id
+WHERE job_postings_fact.job_title LIKE '%Data Scientist%'
 
+
+
+20.	      SELECT job_postings_fact.job_id,
+              job_postings_fact.job_title,
+              skills_job_dim.skill_id,
+              skills_dim.skills
+FROM job_postings_fact
+LEFT join skills_job_dim on job_postings_fact.job_id = skills_job_dim.job_id
+LEFT join skills_dim on skills_job_dim.skill_id = skills_dim.skill_id
+WHERE job_postings_fact.job_location = 'New York' and job_postings_fact.job_health_insurance = 1
+
+
+
+21.	
+SELECT        company_dim.name,
+	      company_dim.company_id,
+              COUNT (job_postings_fact.job_title) AS COUNT1
+FROM company_dim
+LEFT join job_postings_fact on company_dim.company_id = job_postings_fact.company_id
+GROUP BY company_dim.name
+ORDER by COUNT1 desc
+
+
+22.      
+SELECT
+	      skills_dim.skills,
+              job_postings_fact.job_id,
+              job_postings_fact.job_title,
+              skills_job_dim.skill_id,
+              AVG (job_postings_fact.salary_year_avg) AS AVG1,
+              COUNT (job_postings_fact.job_id) AS COUNT1
+FROM skills_dim
+LEFT join skills_job_dim on skills_dim.skill_id = skills_job_dim.skill_id 
+LEFT join job_postings_fact on skills_job_dim.job_id = job_postings_fact.job_id
+GROUP BY skills_dim.skills
+/* ORDER BY AVG1 DESC
 
